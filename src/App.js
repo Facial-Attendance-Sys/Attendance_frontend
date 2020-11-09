@@ -10,7 +10,7 @@ import PrivateRoute from './PrivateRoute'
 function App(){
   return (
     <div className="App">
-      <BrowserRouter>
+      <BrowserRouter basename={process.env.PUBLIC_URL}>
       <Switch>
         <Route exact path='/' component={SignIn} />
         <Route  exact path='/signup' component={SignUp}/>

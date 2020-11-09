@@ -15,7 +15,7 @@ function Body()
             <h1>Welcome student</h1>
             
             {
-              Array(100).fill().map((i)=>(<SignUp/>))
+              Array(15).fill().map((i)=>(<SignUp/>))
             }
             
         </div>
