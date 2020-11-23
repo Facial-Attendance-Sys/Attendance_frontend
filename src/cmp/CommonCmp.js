@@ -1,7 +1,8 @@
 import MuiAlert from '@material-ui/lab/Alert';
-import {Snackbar} from '@material-ui/core'
+import {Snackbar,Button} from '@material-ui/core'
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
+import {Redirect,useHistory} from 'react-router-dom';
 
 const useStylesLoading = makeStyles((theme) => ({
   root: {
@@ -49,7 +50,34 @@ function AlertMessage(props)
     )
   }
 
-  export default AlertMessage
+
+function Logout()
+{
+  const history=useHistory()
+     
+      function logout()
+    {
+      
+      // console.log('logout clicked');
+    localStorage.removeItem('token');
+    history.push('/')
+   
+    }
+  
+  return    <Button
+            
+            fullWidth
+            variant="contained"
+            color="primary"
+            onClick={logout}
+          >
+           Logout<Logout/>
+          </Button>
+
+}
+
+export default AlertMessage
+
   export {
-Loading
+Loading,Logout
   }

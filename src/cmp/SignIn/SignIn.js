@@ -12,7 +12,7 @@ import check_session from '../Session'
 import api from '../API_URL'
 import {Loading} from '../CommonCmp'
 
-export default function SignIn() {
+export default function  SignIn() {
   
   
   const [is_logged_in, setis_logged_in] = useState(false)
@@ -73,7 +73,7 @@ function Body(props)
      fetch(api+'/user/login',{method:'POST',headers:{'Content-type':'application/json'},body:JSON.stringify(data)})
     .then(res=>res.json())
     .then((data)=>on_data(data))
-    .catch(err=>(formik.setSubmitting(false) || seterror({message:'No Internet Connection',is_have:true,type:'error'})))
+    .catch(err=>(formik.setSubmitting(false) || seterror({message:'Server Error',is_have:true,type:'error'})))
     
   }
 
@@ -151,6 +151,7 @@ function on_data(data)
             onBlur={on_blur}
             error={formik.touched.uid && Boolean(formik.errors.uid)}
             helperText={formik.touched.uid && formik.errors.uid}
+            autoComplete='off'
           />
           
           <TextField
@@ -168,6 +169,7 @@ function on_data(data)
             <IconButton onClick={()=>setisvisible(!isvisible)}>{isvisible?<Visibility/>:<VisibilityOff/>}</IconButton>,
               
             }}
+
             id="password"
             autoComplete="current-password"
             value={formik.values.password}

@@ -1,24 +1,36 @@
-import {React}from 'react'
-import SignUp from '../SignUp/SignUp'
+import {React, useState}from 'react'
 
-const department=[1,2,3,4,5]
+import Header from './Header'
+
+import { Grid } from '@material-ui/core'
 function Student_index() {
-  
-    return <Body/>
+   
+
+    return (
+        <Grid container >
+             <Grid item xs={12}>
+                 <Header />
+                 
+             </Grid>
+             <Grid item container  xs={12}>
+             <Body/>
+             </Grid>
+        </Grid>
+    )
 
 }
 
 function Body()
 {
     return (
-        <div>
-            <h1>Welcome student</h1>
+        <Grid item >
+             <h1>Welcome student</h1>
+           
+        </Grid>
+           
             
-            {
-              Array(15).fill().map((i)=>(<SignUp/>))
-            }
-            
-        </div>
+           
+       
     )
 
 }
