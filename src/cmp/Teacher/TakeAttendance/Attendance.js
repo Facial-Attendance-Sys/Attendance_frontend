@@ -87,6 +87,35 @@ function Attendance() {
 
       const checkduplicates=(data)=>{
         var nonduplicate=[]  
+        var newresult=[]
+        // var f;
+        // for(var i=0;i<data.length;i++)
+        // {
+        //   f=fetched.findIndex((st)=>{
+        //     return st.uid===data[i].uid
+        //   })
+
+        //   if(f==-1)
+        //     {
+              
+        //       nonduplicate.push(data[i])
+        //       setfetched(fetched.concat(nonduplicate));
+        //       break;
+        //     }
+        //     else if(data[i].present!=fetched[f].present && !fetched[f].present)
+        //     {
+              
+        //       newresult.push(data[i])
+        //     }
+        //     else
+        //     {
+        //       newresult.push(data[i])
+        //     }
+
+        // }
+        // if(f!==1)
+        // { setfetched(newresult)}
+         
         data.map(stud=>{
             var f=fetched.findIndex((st)=>{
               return st.uid===stud.uid
@@ -101,7 +130,14 @@ function Attendance() {
             else if(stud.present!=fetched[f].present && !fetched[f].present)
             {
               
-              oncheckbox(stud.uid)
+              // oncheckbox(stud.uid)
+              newresult.push(stud)
+              setfetched(newresult)
+            }
+            else
+            {
+              newresult.push(fetched[f])
+              setfetched(newresult)
             }
   
           })

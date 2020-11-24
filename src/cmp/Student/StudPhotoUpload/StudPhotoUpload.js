@@ -1,4 +1,5 @@
 import {React, useState,useEffect}from 'react'
+import Compress from 'compress.js'
 import {Fab, Grid, Typography} from '@material-ui/core'
 import AddIcon from '@material-ui/icons/Add';
 import useStyles from './Styles';
@@ -44,16 +45,45 @@ function StudPhotoUpload() {
        var temp=e.target.files
        setimages(images.concat(Object.values(temp)))
     }
-
+    
+    
     const upload=async ()=>{
 
       setisuploading(true)
-      var FD=new FormData()
-      FD.append('token',localStorage.token)
-      for (const file of images) {
-        FD.append('userPhoto', file, file.name);
+      var FD=new FormData();
+      FD.append('token',localStorage.token);
+
+       const compress= new Compress();
+      for(var i=0;i<images.length;i++)
+      {
+        
+        console.log(images[i]);
+        const name=images[i].name
+        const data=await compress.compress([images[i]], {
+          size: 10, // the max size in MB, defaults to 2MB
+          quality: .75, // the quality of the image, max is 1,
+          maxWidth: 1920, // the max width of the output image, defaults to 1920px
+          maxHeight: 1920, // the max height of the output image, defaults to 1920px
+          resize: true, // defaults to true, set false if you do not want to resize the image width and height
+        })
+          
+          const img1 = data[0]
+          const base64str = img1.data
+          const imgExt = img1.ext
+          
+          const d = Compress.convertBase64ToFile(base64str, imgExt)
+          const  file = new File([d],name,{ type: d.type });
+          console.log(file);
+          FD.append('userPhoto', file, file.name);
+        
+
       }
+
       
+      // for (const file of images) {
+      //     FD.append('userPhoto', file, file.name);
+      // }
+      // console.log(FD);
       const res=await fetch(api+'/upload',{method:'POST',body:FD})
       .then(res=>res.json())
       setimagestatus(res)
