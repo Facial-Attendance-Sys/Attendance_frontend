@@ -67,7 +67,7 @@ function Form(props) {
                 
                 >
                 {props.subjects.map((option) => (
-                    <MenuItem key={option.code} value={option.code}>
+                    <MenuItem key={option.code} value={option.code+' '+option.name}>
                     {option.code+' '+option.name}
                     </MenuItem>
                 ))}

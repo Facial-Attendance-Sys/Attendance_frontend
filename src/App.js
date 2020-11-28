@@ -8,6 +8,7 @@ import Teacher_index from './cmp/Teacher/Teacher_index';
 import PrivateRoute from './PrivateRoute'
 import StudPhotoUpload from './cmp/Student/StudPhotoUpload/StudPhotoUpload';
 import Attendance from './cmp/Teacher/TakeAttendance/Attendance';
+import Checkattendance from './cmp/Student/Checkattendance/Checkattendance';
 
 function App(){
   return (
@@ -22,6 +23,7 @@ function App(){
         
         <PrivateRoute  exact path='/student' component={Student_index} role='student'/>
         <PrivateRoute  exact path='/student/upload' component={StudPhotoUpload} role='student'/>
+        <PrivateRoute  exact path='/student/attendance' component={Checkattendance} role='student'/>
         
         
         <Redirect  to='/' />

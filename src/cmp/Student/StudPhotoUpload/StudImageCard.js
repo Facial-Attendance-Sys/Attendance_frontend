@@ -8,12 +8,12 @@ import { Typography } from '@material-ui/core';
 
 
 
-function StudImageCard(props){
+function StudImageCard(props) {
 
-    
-    const classes=CardStyles();
+
+  const classes = CardStyles();
   return (
-      <Card className={classes.root}>
+    <Card className={classes.root}>
       <CardActionArea>
         <CardMedia
           className={classes.media}
@@ -21,14 +21,14 @@ function StudImageCard(props){
           title="Contemplative Reptile"
         />
         <CardContent>
-        <Typography variant="h6" color='secondary'className={classes.title}>
+          <Typography variant="h6" color='secondary' className={classes.title}>
 
-          {props.isuploading?'Uploading...':props.status?'Uploaded': props.status===undefined?'':'Invalid Image'}
-        </Typography>
-          
+            {props.isuploading ? 'Uploading...' : props.status ? 'Uploaded' : props.status === undefined ? '' : 'Invalid Image'}
+          </Typography>
+
         </CardContent>
       </CardActionArea>
-      
+
     </Card>
   )
 }

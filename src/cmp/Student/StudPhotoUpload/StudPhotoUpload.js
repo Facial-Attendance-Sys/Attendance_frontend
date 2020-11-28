@@ -8,7 +8,7 @@ import Header from '../Header';
 import CheckIcon from '@material-ui/icons/Check';
 import api from '../../API_URL'
 import {Loading} from '../../CommonCmp'
-import Drawer from '../Drawer'
+
 
 
 
@@ -18,13 +18,12 @@ function StudPhotoUpload() {
     const [isuploading, setisuploading] = useState(false)
     const [fetched, setfetched] = useState([])
     const [loading, setloading] = useState(true)
-    const [isopen, setisopen] = useState(false)
     
 
     useEffect(() => {
       async function fetchData() {
         
-        const res=await fetch(api,{method:'post',headers:{'Content-type':'application/json'},body:JSON.stringify({token:localStorage.token})})
+        const res=await fetch(api+'/getuserphoto',{method:'post',headers:{'Content-type':'application/json'},body:JSON.stringify({token:localStorage.token})})
       .then(res=>res.json())
       // console.log(res);
        setfetched(res)
@@ -52,7 +51,7 @@ function StudPhotoUpload() {
       setisuploading(true)
       var FD=new FormData();
       FD.append('token',localStorage.token);
-
+     //code to compress all the images uploaded by client
        const compress= new Compress();
       for(var i=0;i<images.length;i++)
       {
@@ -80,10 +79,7 @@ function StudPhotoUpload() {
       }
 
       
-      // for (const file of images) {
-      //     FD.append('userPhoto', file, file.name);
-      // }
-      // console.log(FD);
+      
       const res=await fetch(api+'/upload',{method:'POST',body:FD})
       .then(res=>res.json())
       setimagestatus(res)
@@ -97,8 +93,8 @@ function StudPhotoUpload() {
     return (
          <Grid container >
              <Grid item xs={12}>
-                 <Header setisopen={setisopen}/>
-                 <Drawer isopen={isopen} setisopen={setisopen}/>
+                 <Header />
+                
              </Grid>
              <Grid item container  xs={12}>
                <Content images={images} loading={loading} fetched={fetched} imagestatus={imagestatus} isuploading={isuploading}/>

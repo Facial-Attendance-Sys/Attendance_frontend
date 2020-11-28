@@ -1,4 +1,4 @@
-import {React, useState} from 'react'
+import {React, useEffect, useState} from 'react'
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
@@ -7,7 +7,10 @@ import MenuIcon from '@material-ui/icons/Menu';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import { makeStyles } from '@material-ui/core/styles';
 import Drawer from './Drawer'
-
+import api from '../API_URL'
+import { useHistory } from 'react-router-dom';
+import { AccountCircle } from '@material-ui/icons';
+import { Menu, MenuItem } from '@material-ui/core';
 const useStyles = makeStyles((theme) => ({
     root: {
       flexGrow: 1,
@@ -32,9 +35,41 @@ const useStyles = makeStyles((theme) => ({
 
 function Header() {
   const [isopen, setisopen] = useState(false);
-  
-    const classes=useStyles();
+  const [anchorE1, setanchorE1] = useState(null);
+  const [name, setname] = useState('')
 
+    const classes=useStyles();
+    const history=useHistory();
+
+    const logout=async()=>
+    {
+      fetch(api+'/user/logout',{method:'post',headers: { 'Content-type': 'application/json' }, body: JSON.stringify({token:localStorage.token}) })
+      // console.log('logout clicked');
+    localStorage.removeItem('token');
+    history.push('/')
+   
+    }
+
+  useEffect(() => {
+    async function fetch_data()
+    {
+      const res=await fetch(api+'/getdetails',{ method: 'POST', headers: { 'Content-type': 'application/json' }, body: JSON.stringify({token:localStorage.token})})
+      .then(res=>res.json());
+      setname(res.name)
+    }
+    fetch_data()
+    return () => {
+      
+    }
+  }, [])
+
+  const handleClose=()=>{
+    setanchorE1(null)
+
+  }
+  const handleMenu=(e)=>{
+    setanchorE1(e.currentTarget)
+  }
     
     
     return(
@@ -47,9 +82,27 @@ function Header() {
           <Typography variant="h6" className={classes.title}>
             Face-Net-Niet
           </Typography>
-          <IconButton aria-label="display more actions" edge="end" color="inherit">
-            <MoreIcon />
-          </IconButton>
+          <IconButton
+                aria-label="account of current user"
+                aria-controls="menu-appbar"
+                aria-haspopup="true"
+                onClick={handleMenu}
+                color="inherit"
+              >
+                <AccountCircle />
+              </IconButton>
+              <Menu
+                id="menu-appbar"
+                anchorEl={anchorE1}
+                
+                keepMounted
+                
+                open={Boolean(anchorE1)}
+                onClose={handleClose}
+              >
+                <MenuItem onClick={handleClose}>{name}</MenuItem>
+                <MenuItem onClick={logout}>Logout</MenuItem>
+              </Menu>
         </Toolbar>
       </AppBar>
       <Drawer isopen={isopen} setisopen={setisopen}/>

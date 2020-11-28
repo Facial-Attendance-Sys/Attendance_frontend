@@ -1,79 +1,76 @@
-import {React ,useState}from 'react';
-import {MenuItem,IconButton,Avatar,CircularProgress,Button , CssBaseline, TextField,Link , Grid ,Box ,Typography ,Container} from '@material-ui/core';
+import { React, useState } from 'react';
+import { MenuItem, IconButton, Avatar, CircularProgress, Button, CssBaseline, TextField, Link, Grid, Box, Typography, Container } from '@material-ui/core';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import { useFormik } from 'formik';
-import {Visibility,VisibilityOff} from '@material-ui/icons'
+import { Visibility, VisibilityOff } from '@material-ui/icons'
 
 import SignUpStyles from './SignUpStyles'
-import {SignUpSchema} from '../Validate';
+import { SignUpSchema } from '../Validate';
 import AlertMessage from '../CommonCmp';
 import api from '../API_URL'
 
-const Departments=[{'value':'Computer Science','svalue':'CSE'}]
-const sections=['A','B','C','D']
-export default function SignUp(){
-  
+const Departments = [{ 'value': 'Computer Science', 'svalue': 'CSE' }]
+const sections = ['A', 'B', 'C', 'D']
+export default function SignUp() {
+
   const classes = SignUpStyles();
-  const [error, seterror] = useState({is_have:false,message:'this is an error',type:'error'})
+  const [error, seterror] = useState({ is_have: false, message: 'this is an error', type: 'error' })
   const [isvisible, setisvisible] = useState(false)
 
-const on_submit=(data)=>{
-    
-    fetch(api+'/user/register',{method:'POST',headers:{'Content-type':'application/json'},body:JSON.stringify(data)})
-    .then(res=>res.json())
-    .then((data)=>on_data(data))
-    .catch(err=>seterror({message:'Server Error',is_have:true,type:'error'}))
-    
-    
-}
+  const on_submit = (data) => {
 
-function on_data(data)
-{
-  formik.setSubmitting(false)
-  console.log(data);
-  if(data.status)
-  {
-    formik.resetForm()
-    seterror({message:'Successfully Registered!',is_have:true,type:'success'})
+    fetch(api + '/user/register', { method: 'POST', headers: { 'Content-type': 'application/json' }, body: JSON.stringify(data) })
+      .then(res => res.json())
+      .then((data) => on_data(data))
+      .catch(err => seterror({ message: 'Server Error', is_have: true, type: 'error' }))
+
 
   }
-  else
-  {
-    seterror({message:'Already Registered!',is_have:true,type:'error'})
+
+  function on_data(data) {
+    formik.setSubmitting(false)
+    console.log(data);
+    if (data.status) {
+      formik.resetForm()
+      seterror({ message: 'Successfully Registered!', is_have: true, type: 'success' })
+
+    }
+    else {
+      seterror({ message: 'Already Registered!', is_have: true, type: 'error' })
+    }
   }
-}
-  
-  const on_value_change=(e)=>{
+
+  const on_value_change = (e) => {
     formik.handleChange(e);
     //so that touched is set to true
     formik.handleBlur(e)
-    
-    var d=formik.validateForm()
-    d.then(data => formik.errors=data);
-    
-    
+
+    var d = formik.validateForm()
+    d.then(data => formik.errors = data);
+
+
   }
-  
-  const on_blur=(e)=>{
+
+  const on_blur = (e) => {
     formik.handleBlur(e)
-    
+
   }
 
   const formik = useFormik({
     initialValues: {
       uid: '',
       password: '',
-      department:'',
-      Name:'',
-      section:'',
-      role:'student',
-      email:''
+      department: '',
+      Name: '',
+      section: '',
+      role: 'student',
+      email: ''
     },
     validationSchema: SignUpSchema,
     onSubmit: on_submit
   });
-  
-  
+
+
 
   return (
     <Container className={classes.font} component="main" maxWidth="xs">
@@ -89,8 +86,8 @@ function on_data(data)
         <AlertMessage error={error.is_have} type={error.type} seterror={seterror} message={error.message} />
 
         <form className={classes.form} onSubmit={formik.handleSubmit} noValidate>
-          
-        <TextField
+
+          <TextField
             className={classes.font}
             variant="outlined"
             margin="normal"
@@ -138,7 +135,7 @@ function on_data(data)
           />
 
 
-          
+
           <TextField
             className={classes.font}
             variant="outlined"
@@ -147,12 +144,12 @@ function on_data(data)
             fullWidth
             name="password"
             label="Password"
-            type={isvisible?'text':'password'}
+            type={isvisible ? 'text' : 'password'}
             id="password"
             InputProps={{
               endAdornment:
-            <IconButton onClick={()=>setisvisible(!isvisible)}>{isvisible?<Visibility/>:<VisibilityOff/>}</IconButton>,
-              
+                <IconButton onClick={() => setisvisible(!isvisible)}>{isvisible ? <Visibility /> : <VisibilityOff />}</IconButton>,
+
             }}
             autoComplete="current-password"
             value={formik.values.password}
@@ -161,49 +158,49 @@ function on_data(data)
             error={formik.touched.password && Boolean(formik.errors.password)}
             helperText={formik.touched.password && formik.errors.password}
           />
-          
+
           <TextField
-          id="department"
-          select
-          variant="outlined"
+            id="department"
+            select
+            variant="outlined"
             margin="normal"
             required
             fullWidth
-          label="Department"
-          name="department"
-          value={formik.values.department}
-          onChange={on_value_change}
-          onBlur={on_blur}
-          error={formik.touched.department && Boolean(formik.errors.department)}
-          helperText={formik.touched.department && formik.errors.department}
-        >
-          {Departments.map((option) => (
-            <MenuItem key={option.value} value={option.svalue}>
-              {option.value}
-            </MenuItem>
-          ))}
-        </TextField>
-        <TextField
-          id="section"
-          select
-          variant="outlined"
+            label="Department"
+            name="department"
+            value={formik.values.department}
+            onChange={on_value_change}
+            onBlur={on_blur}
+            error={formik.touched.department && Boolean(formik.errors.department)}
+            helperText={formik.touched.department && formik.errors.department}
+          >
+            {Departments.map((option) => (
+              <MenuItem key={option.value} value={option.svalue}>
+                {option.value}
+              </MenuItem>
+            ))}
+          </TextField>
+          <TextField
+            id="section"
+            select
+            variant="outlined"
             margin="normal"
             required
             fullWidth
-          label="Section"
-          name="section"
-          value={formik.values.section}
-          onChange={on_value_change}
-          onBlur={on_blur}
-          error={formik.touched.section && Boolean(formik.errors.section)}
-          helperText={formik.touched.section && formik.errors.section}
-        >
-          {sections.map((option) => (
-            <MenuItem key={option} value={option}>
-              {option}
-            </MenuItem>
-          ))}
-        </TextField>
+            label="Section"
+            name="section"
+            value={formik.values.section}
+            onChange={on_value_change}
+            onBlur={on_blur}
+            error={formik.touched.section && Boolean(formik.errors.section)}
+            helperText={formik.touched.section && formik.errors.section}
+          >
+            {sections.map((option) => (
+              <MenuItem key={option} value={option}>
+                {option}
+              </MenuItem>
+            ))}
+          </TextField>
 
           <Button
             type="submit"
@@ -213,7 +210,7 @@ function on_data(data)
             className={classes.submit}
             disabled={formik.isSubmitting}
           >
-            {formik.isSubmitting?<CircularProgress color='secondary' size={30} />:'Register'}
+            {formik.isSubmitting ? <CircularProgress color='secondary' size={30} /> : 'Register'}
           </Button>
 
 
@@ -248,8 +245,8 @@ function Copyright() {
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
-      <br/>
-      <br/>
+      <br />
+      <br />
     </Typography>
   );
 }
