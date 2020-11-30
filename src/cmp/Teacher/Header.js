@@ -1,16 +1,12 @@
 import {React, useEffect, useState} from 'react'
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import IconButton from '@material-ui/core/IconButton';
-import Typography from '@material-ui/core/Typography';
+import { AppBar, Toolbar, IconButton, Typography, makeStyles } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
-import MoreIcon from '@material-ui/icons/MoreVert';
-import { makeStyles } from '@material-ui/core/styles';
+
 import Drawer from './Drawer'
-import api from '../API_URL'
 import { useHistory } from 'react-router-dom';
-import { AccountCircle } from '@material-ui/icons';
-import { Menu, MenuItem } from '@material-ui/core';
+import { Avatar, Menu, MenuItem } from '@material-ui/core';
+import {get, Logout} from '../CommonCmp'
+
 const useStyles = makeStyles((theme) => ({
     root: {
       flexGrow: 1,
@@ -21,14 +17,9 @@ const useStyles = makeStyles((theme) => ({
     title: {
       flexGrow: 1,
     },
-    fab: {
-        position: 'fixed',
-        bottom: theme.spacing(2),
-        right: theme.spacing(2),
-      },
-      input: {
-        display: 'none',
-      },
+    menu:{
+      marginTop:35
+    }
   }));
 
 
@@ -41,23 +32,24 @@ function Header() {
     const classes=useStyles();
     const history=useHistory();
 
-    const logout=async()=>
-    {
-      fetch(api+'/user/logout',{method:'post',headers: { 'Content-type': 'application/json' }, body: JSON.stringify({token:localStorage.token}) })
-      // console.log('logout clicked');
-    localStorage.removeItem('token');
-    history.push('/')
-   
-    }
 
   useEffect(() => {
     async function fetch_data()
     {
-      const res=await fetch(api+'/getdetails',{ method: 'POST', headers: { 'Content-type': 'application/json' }, body: JSON.stringify({token:localStorage.token})})
-      .then(res=>res.json());
-      setname(res.name)
+     
+      const res=await get('/getdetails',{token:localStorage.token})
+       
+      if(res)
+      {
+         setname(res.name);
+         sessionStorage.name = res.name
+         
+      }
     }
+    if(!sessionStorage.name)
+    {
     fetch_data()
+    }
     return () => {
       
     }
@@ -69,6 +61,16 @@ function Header() {
   }
   const handleMenu=(e)=>{
     setanchorE1(e.currentTarget)
+  }
+  function toTitleCase(str)
+  {
+    if(str)
+    return str.replace(
+      /\w\S*/g,function(txt){return txt.charAt(0).toUpperCase()+txt.substr(1).toLowerCase();}
+    )
+    else
+    {return str}
+
   }
     
     
@@ -89,19 +91,19 @@ function Header() {
                 onClick={handleMenu}
                 color="inherit"
               >
-                <AccountCircle />
+                <Avatar alt={name || sessionStorage.name} src='/ds'/>
               </IconButton>
               <Menu
                 id="menu-appbar"
                 anchorEl={anchorE1}
-                
+                className={classes.menu}
                 keepMounted
                 
                 open={Boolean(anchorE1)}
                 onClose={handleClose}
               >
-                <MenuItem onClick={handleClose}>{name}</MenuItem>
-                <MenuItem onClick={logout}>Logout</MenuItem>
+                <MenuItem onClick={handleClose}>{toTitleCase(name) || toTitleCase(sessionStorage.name)}</MenuItem>
+                <MenuItem onClick={()=>Logout(history)}>Logout</MenuItem>
               </Menu>
         </Toolbar>
       </AppBar>

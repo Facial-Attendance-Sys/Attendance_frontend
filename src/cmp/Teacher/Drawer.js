@@ -1,8 +1,8 @@
 import { List, ListItem, ListItemIcon, ListItemText, makeStyles, SwipeableDrawer } from '@material-ui/core'
-import { AddOutlined, CheckBoxOutlined, ExitToAppOutlined, HomeOutlined, PersonPinCircleOutlined } from '@material-ui/icons';
+import { CheckBoxOutlined, ExitToAppOutlined, HomeOutlined, PersonPinCircleOutlined } from '@material-ui/icons';
 import React from 'react'
 import { useHistory } from 'react-router-dom';
-import api from '../API_URL';
+import {Logout} from '../CommonCmp'
 
 const useStyles = makeStyles({
   list: {
@@ -33,14 +33,7 @@ function Drawer(props) {
 function Items() {
   const history = useHistory()
   const classes = useStyles()
-  const logout = async() => {
-    await fetch(api+'/user/logout',{method:'post',headers: { 'Content-type': 'application/json' }, body: JSON.stringify({token:localStorage.token}) })
-    // console.log('logout clicked');
-    localStorage.removeItem('token');
-    history.push('/')
-
-  }
-
+  
   return (
     <div
       className={classes.list}
@@ -66,7 +59,7 @@ function Items() {
 
         <ListItem button key={4} >
           <ListItemIcon><ExitToAppOutlined />  </ListItemIcon>
-          <ListItemText primary={'Logout'} onClick={logout} />
+          <ListItemText primary={'Logout'} onClick={()=>Logout(history)} />
         </ListItem>
 
       </List>

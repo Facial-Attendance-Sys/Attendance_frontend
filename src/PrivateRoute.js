@@ -1,5 +1,5 @@
 import {React,useState,useEffect} from 'react'
-import {Redirect,Route} from 'react-router-dom'
+import {Redirect} from 'react-router-dom'
 import check_session from './cmp/Session'
 import {Loading} from './cmp/CommonCmp'
 

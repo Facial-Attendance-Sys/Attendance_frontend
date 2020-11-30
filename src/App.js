@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './App.css';
 import SignIn from './cmp/SignIn/SignIn';
 import SignUp from './cmp/SignUp/SignUp';

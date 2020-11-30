@@ -7,7 +7,7 @@ import StudImageCard from './StudImageCard';
 import Header from '../Header';
 import CheckIcon from '@material-ui/icons/Check';
 import api from '../../API_URL'
-import {Loading} from '../../CommonCmp'
+import {Loading,get} from '../../CommonCmp'
 
 
 
@@ -22,17 +22,21 @@ function StudPhotoUpload() {
 
     useEffect(() => {
       async function fetchData() {
-        
-        const res=await fetch(api+'/getuserphoto',{method:'post',headers:{'Content-type':'application/json'},body:JSON.stringify({token:localStorage.token})})
-      .then(res=>res.json())
-      // console.log(res);
-       setfetched(res)
-       setloading(false)
-       setimages([])
-       if(res.length>10)
-       {setisuploading(true)}
+      
+      const res=await get('/getuserphoto',{token:localStorage.token});
+      if(res)
+      {
+        setfetched(res)
+        setloading(false)
+        setimages([])
+        if(res.length>10)
+        {setisuploading(true)}
+      }
+      
+       
         
       }
+
       fetchData()
       return () => {
        
@@ -52,11 +56,11 @@ function StudPhotoUpload() {
       var FD=new FormData();
       FD.append('token',localStorage.token);
      //code to compress all the images uploaded by client
-       const compress= new Compress();
+      const compress= new Compress();
       for(var i=0;i<images.length;i++)
       {
         
-        console.log(images[i]);
+        
         const name=images[i].name
         const data=await compress.compress([images[i]], {
           size: 10, // the max size in MB, defaults to 2MB
@@ -72,7 +76,7 @@ function StudPhotoUpload() {
           
           const d = Compress.convertBase64ToFile(base64str, imgExt)
           const  file = new File([d],name,{ type: d.type });
-          console.log(file);
+          
           FD.append('userPhoto', file, file.name);
         
 

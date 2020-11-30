@@ -7,7 +7,9 @@ import AddIcon from '@material-ui/icons/Add';
 import useStyles from './Styles'
 import api from '../../API_URL'
 import StudentTable from './StudentTable'
-import AlertMessage from '../../CommonCmp'
+import AlertMessage, { get } from '../../CommonCmp'
+
+import Compress from 'compress.js';
 
 function Attendance() {
   const [departments, setdepartments] = useState({ 'values': ['Computer Science'], 'short': ['CSE'] })
@@ -47,9 +49,31 @@ function Attendance() {
     var FD = new FormData()
     FD.append('token', localStorage.token)
     FD.append('class', branch + '-' + section)
-    for (const file of images) {
-      FD.append('userPhoto', file, file.name);
-    }
+    const compress= new Compress();
+      for(var i=0;i<images.length;i++)
+      {
+        
+        
+        const name=images[i].name
+        const data=await compress.compress([images[i]], {
+          size: 10, // the max size in MB, defaults to 2MB
+          quality: .75, // the quality of the image, max is 1,
+          maxWidth: 1920, // the max width of the output image, defaults to 1920px
+          maxHeight: 1920, // the max height of the output image, defaults to 1920px
+          resize: true, // defaults to true, set false if you do not want to resize the image width and height
+        })
+          
+          const img1 = data[0]
+          const base64str = img1.data
+          const imgExt = img1.ext
+          
+          const d = Compress.convertBase64ToFile(base64str, imgExt)
+          const  file = new File([d],name,{ type: d.type });
+          
+          FD.append('userPhoto', file, file.name);
+        
+
+      }
 
     const res = await fetch(api + '/recognize', { method: 'POST', body: FD })
       .then(res => res.json())
@@ -57,7 +81,6 @@ function Attendance() {
     if (res.status) {
 
       checkduplicates(res.data)
-
       setimages([])
 
     }
@@ -67,6 +90,7 @@ function Attendance() {
 
 
   }
+
   const oncheckbox = (uid) => {
 
     var index = fetched.findIndex((stud) => {
@@ -116,18 +140,18 @@ function Attendance() {
   }
 
   //for uploading student attendance
-  const uploadattendance = () => {
+  const uploadattendance = async() => {
     var data = {
       stud_class: branch + '-' + section,
       subject: subject,
       stud_data: fetched,
       token: localStorage.token
     }
+
     setloading(true)
-    fetch(api + '/markattendance', { method: 'POST', headers: { 'Content-type': 'application/json' }, body: JSON.stringify(data) })
-      .then(res => res.json())
-      .then((data) => on_data(data))
-      .catch(err => console.log(err))
+    
+    const res=await get('/markattendance',data);
+    if(res) on_data(res);
 
 
   }

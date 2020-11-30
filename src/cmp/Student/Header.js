@@ -1,116 +1,130 @@
-import {React, useEffect, useState} from 'react'
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import IconButton from '@material-ui/core/IconButton';
-import Typography from '@material-ui/core/Typography';
+import { React, useEffect, useState } from 'react'
+import { AppBar, Toolbar, IconButton, Typography, makeStyles } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
-import MoreIcon from '@material-ui/icons/MoreVert';
-import { makeStyles } from '@material-ui/core/styles';
-import Drawer from './Drawer'
-import { AccountCircle } from '@material-ui/icons';
-import { Menu, MenuItem } from '@material-ui/core';
-import api from '../API_URL';
 import { useHistory } from 'react-router-dom';
+
+import Drawer from './Drawer'
+import { Avatar, Menu, MenuItem } from '@material-ui/core';
+import { Logout,get } from '../CommonCmp';
+
+
 const useStyles = makeStyles((theme) => ({
-    root: {
-      flexGrow: 1,
-    },
-    menuButton: {
-      marginRight: theme.spacing(2),
-    },
-    title: {
-      flexGrow: 1,
-    },
-    fab: {
-        position: 'fixed',
-        bottom: theme.spacing(2),
-        right: theme.spacing(2),
-      },
-      input: {
-        display: 'none',
-      },
-  }));
+  root: {
+    flexGrow: 1,
+  },
+  menuButton: {
+    marginRight: theme.spacing(2),
+  },
+  title: {
+    flexGrow: 1,
+  },
+  menu:{
+    marginTop:35
+  }
+
+}));
 
 
 
 function Header() {
   const [isopen, setisopen] = useState(false);
   const [anchorE1, setanchorE1] = useState(null);
-  const [name, setname] = useState('')
+  const [name, setname] = useState('');
+  const [avatar, setavatar] = useState('')
 
-  const history=useHistory();
-
-  const logout=async()=>
-    {
-      fetch(api+'/user/logout',{method:'post',headers: { 'Content-type': 'application/json' }, body: JSON.stringify({token:localStorage.token}) })
-      // console.log('logout clicked');
-    localStorage.removeItem('token');
-    history.push('/')
-   
-    }
+  const history = useHistory();
 
   useEffect(() => {
-    async function fetch_data()
-    {
-      const res=await fetch(api+'/getdetails',{ method: 'POST', headers: { 'Content-type': 'application/json' }, body: JSON.stringify({token:localStorage.token})})
-      .then(res=>res.json());
-      setname(res.name)
-    }
-    fetch_data()
-    return () => {
+
+    async function fetch_data() {
+      
+       const res=await get('/getdetails',{token:localStorage.token})
+       
+       if(res)
+       {
+          setname(res.name);
+          sessionStorage.name = res.name
+          if (res.avatar) {
+            sessionStorage.avatar = res.avatar
+            setavatar(res.avatar);
+          }
+       }
       
     }
-  }, [])
-  const classes=useStyles();
-   const handleClose=()=>{
-     setanchorE1(null)
 
-   }
-   const handleMenu=(e)=>{
-     setanchorE1(e.currentTarget)
-   }
-    
-    
-    return(
-<div className={classes.root}>
+    if (!sessionStorage.name) {
+      fetch_data()
+    }
+
+
+    return () => {
+
+    }
+  }, [])
+
+  const classes = useStyles();
+
+  const handleClose = () => {
+    setanchorE1(null)
+
+  }
+  const handleMenu = (e) => {
+    setanchorE1(e.currentTarget)
+  }
+
+  function toTitleCase(str)
+  {
+    if(str)
+    return str.replace(
+      /\w\S*/g,function(txt){return txt.charAt(0).toUpperCase()+txt.substr(1).toLowerCase();}
+    )
+    else
+    {return str}
+
+  }
+
+
+  return (
+    <div className={classes.root}>
       <AppBar position="static">
         <Toolbar>
-          <IconButton edge="start" onClick={()=>setisopen(true)} className={classes.menuButton} color="inherit" aria-label="menu">
+          <IconButton edge="start" onClick={() => setisopen(true)} className={classes.menuButton} color="inherit" aria-label="menu">
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" className={classes.title}>
             Face-Net-Niet
           </Typography>
+
+          <IconButton
+            aria-label="account of current user"
+            aria-controls="menu-appbar"
+            aria-haspopup="true"
+            onClick={handleMenu}
+            color="inherit"
+          >
+            <Avatar alt={name || sessionStorage.name} src={avatar ? `data:image/png;base64,` + avatar : `data:image/png;base64,` + sessionStorage.avatar} />
+          </IconButton>
           
-              <IconButton
-                aria-label="account of current user"
-                aria-controls="menu-appbar"
-                aria-haspopup="true"
-                onClick={handleMenu}
-                color="inherit"
-              >
-                <AccountCircle />
-              </IconButton>
-              <Menu
-                id="menu-appbar"
-                anchorEl={anchorE1}
-                
-                keepMounted
-                
-                open={Boolean(anchorE1)}
-                onClose={handleClose}
-              >
-                <MenuItem onClick={handleClose}>{name}</MenuItem>
-                <MenuItem onClick={logout}>Logout</MenuItem>
-              </Menu>
+          <Menu
+            id="menu-appbar"
+            anchorEl={anchorE1}
+            className={classes.menu}
+            keepMounted
             
+            open={Boolean(anchorE1)}
+            onClose={handleClose}
+          >
+            <MenuItem onClick={handleClose}>{toTitleCase(name) || toTitleCase(sessionStorage.name)}</MenuItem>
+            <MenuItem onClick={() => Logout(history)}>Logout</MenuItem>
+          </Menu>
+
         </Toolbar>
       </AppBar>
-      <Drawer isopen={isopen} setisopen={setisopen}/>
+      <Drawer isopen={isopen} setisopen={setisopen} />
     </div>
 
 
-    )
+  )
 }
 
 export default Header

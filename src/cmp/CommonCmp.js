@@ -3,7 +3,7 @@ import {Snackbar,Button} from '@material-ui/core'
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import {Redirect,useHistory} from 'react-router-dom';
-
+import api from './API_URL'
 const useStylesLoading = makeStyles((theme) => ({
   root: {
     display:'flex',
@@ -51,33 +51,38 @@ function AlertMessage(props)
   }
 
 
-function Logout()
+const Logout=(history)=>
 {
-  const history=useHistory()
-     
-      function logout()
-    {
-      
-      // console.log('logout clicked');
-    localStorage.removeItem('token');
-    history.push('/')
-   
-    }
   
-  return    <Button
-            
-            fullWidth
-            variant="contained"
-            color="primary"
-            onClick={logout}
-          >
-           Logout<Logout/>
-          </Button>
+  fetch(api+'/user/logout',{method:'post',headers: { 'Content-type': 'application/json' }, body: JSON.stringify({token:localStorage.token}) })
+  // console.log('logout clicked');
+  sessionStorage.clear();
+  localStorage.removeItem('token');
+  history.push('/')  
+    
 
+}
+
+async function get(url,data)
+{ 
+  var result='';
+   try
+   {
+    result = await fetch(api + url, { method: 'POST', headers: { 'Content-type': 'application/json' }, body: JSON.stringify(data) })
+    .then(res => res.json())
+    
+   }
+   catch(err){
+     console.error(err);
+   }
+
+   return result;
+  
+  
 }
 
 export default AlertMessage
 
   export {
-Loading,Logout
+Loading,Logout,get
   }

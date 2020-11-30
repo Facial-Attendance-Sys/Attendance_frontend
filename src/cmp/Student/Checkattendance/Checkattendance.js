@@ -1,10 +1,11 @@
 import { Grid, lighten, makeStyles, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core'
 import React, { useEffect } from 'react'
 import { useState } from 'react'
-import { Loading } from '../../CommonCmp'
+import { Loading ,get} from '../../CommonCmp'
 import Header from '../Header'
-import api from '../../API_URL';
+
 import Paper from '@material-ui/core/Paper';
+
 function Checkattendance() {
     return (
         <Grid container >
@@ -26,16 +27,15 @@ function Body() {
     useEffect(() => {
         async function get_data()
         {
-        const data=await fetch(api+'/get_attendance',{ method: 'post', headers: { 'Content-type': 'application/json' }, body: JSON.stringify({token:localStorage.token}) })
-        .then(res=>res.json())
-        .catch(err=>console.error(err));
-        console.log(data);
-        if(data.status)
-        {
+        
+         const data=await get('/get_attendance',{token:localStorage.token});
+         if(data && data.status)
+         {
           setloading(false);
           console.log(data);
           setres(data.stud_data)
-        }
+         }
+        
 
         }
         get_data();
@@ -49,6 +49,8 @@ function Body() {
 
 
 }
+
+
 const useStyles = makeStyles({
     table: {
     
@@ -69,6 +71,8 @@ const useStyles = makeStyles({
       color: 'white'
     }
   });
+
+
 function Stud_table(props)
 {  const classes=useStyles();
 
