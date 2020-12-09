@@ -25,6 +25,15 @@ const useStyles = makeStyles((theme) => ({
       },
       field:{
           margin:'8px'
+      },
+      submit: {
+        margin: theme.spacing(4,2, 2),
+        fontFamily:'Poppins',
+        fontSize:18
+      },
+      datefield:{
+        margin:'10px',
+        marginTop:'24px'
       }
   }));
 

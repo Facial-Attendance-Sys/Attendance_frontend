@@ -1,13 +1,17 @@
 import {React, useEffect, useState}from 'react'
 
 import Header from './Header'
-import {Loading,get} from '../CommonCmp'
-import { Grid, Typography } from '@material-ui/core'
+import {Loading,get,toTitleCase} from '../CommonCmp'
+import { Avatar, Button, Grid, Typography } from '@material-ui/core'
+import useStyles,{StyledBadge} from './style'
+import CircularProgresswithLabel from './CircularProgresswithLabel'
+import { NavigateNext } from '@material-ui/icons'
+import CardSection from './CardSection'
+import { useHistory } from 'react-router-dom'
+import Quote from './Quote'
 
 function Student_index(){
     
-   
-
     return (
         <Grid container >
              <Grid item xs={12}>
@@ -23,30 +27,53 @@ function Student_index(){
 }
 
 function Body(props)
-{   const [loading, setloading] = useState(true);
-    const [quote, setquote] = useState('')
-    
+{   
+    const [loading, setloading] = useState(true);
+    const [quote, setquote] = useState('');
+    const [attendance,setattendance]=useState('');
+    const history=useHistory();
 
  useEffect(() => {
 
      async function fetch_data()
-     {
+     {   
          const res=await get('/quotes');
-         if(res)
+        
+         if(res && res.status)
          {
-            if(res.status)
-            {
-                setquote(res.quote);
+             setquote(res.quote);
                 
-                setloading(false);
-            }
+                //for cache data
+                sessionStorage.quote=res.quote.quote
+                sessionStorage.by=res.quote.by
+           
          }
         
         
 
      }
 
-     fetch_data();
+     async function fetch_attendance()
+     {
+        const attendance_data=await get('/get_attendance',{token:localStorage.token});
+        if(attendance_data && attendance_data.status)
+        {
+            setattendance(attendance_data.attendance);
+            console.log(attendance_data);
+            setloading(false)
+
+        }
+
+     }
+    if(!sessionStorage.quote)
+    {
+        fetch_data()
+    }
+    
+    fetch_attendance();
+    
+    
+     
      
      return () => {
          
@@ -54,32 +81,46 @@ function Body(props)
 
  }, []);
 
+ const classes=useStyles();
+
     if(loading) return <Loading/>;
 
     return (
-        
-        <Grid container s={12} lg={12}>
+        <>
+        <Grid container s={12} lg={12} className={classes.container} >
+            <Grid item xs={12} className={classes.center} lg={4}>
+                    <StyledBadge
+                overlap="circle"
+                anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'right',
+                }}
+                variant="dot"
+            >
+            <Avatar  className={classes.avatarsize}  src={sessionStorage.avatar? `data:image/png;base64,` + sessionStorage.avatar:'Default Image'} />
+            </StyledBadge>
+            </Grid>
+            <Grid item xs={12} lg={4} className={classes.center}>
+              <Typography variant="h5">Welcome,<b>{toTitleCase(sessionStorage.name).split(' ')[0]}</b></Typography>
+            </Grid>
+
+            <Grid item xs={12} lg={4} className={classes.center} style={{flexDirection:'column'}}>
+                <CircularProgresswithLabel color='green' size={120} value={attendance}/><br/>
+                <Button variant="outlined" onClick={()=>history.push('student/attendance')} style={{borderRadius:'20px'}}>View Report<NavigateNext/></Button>
+            </Grid>
+
+
 
             
-              <Quotes data={quote}/>
+              
+              
         </Grid>
+        <CardSection/>
+        <Quote data={quote}/>
+        </>
     )
 
 }
 
-function Quotes(props)
-{
- 
 
-return (
-    
-   <marquee>
-       <br/>
-       <q> {props.data.quote}</q> -by <cite>{props.data.by}</cite>
-   </marquee>
-    
-
-)
-
-}
 export default Student_index

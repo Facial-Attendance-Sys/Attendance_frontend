@@ -19,6 +19,7 @@ function Attendance() {
   const [branch, setbranch] = useState('')
   const [section, setsection] = useState('')
   const [subject, setsubject] = useState('')
+  const [semester, setsemester] = useState('')
 
   const [images, setimages] = useState([])
   const [isuploading, setisuploading] = useState(false)
@@ -44,11 +45,15 @@ function Attendance() {
   }
 
   const upload = async () => {
+    
     setisuploading(true)
     console.log(branch + section);
+    
     var FD = new FormData()
     FD.append('token', localStorage.token)
     FD.append('class', branch + '-' + section)
+    FD.append('department',branch)
+    FD.append('semester',semester)
     const compress= new Compress();
       for(var i=0;i<images.length;i++)
       {
@@ -74,7 +79,7 @@ function Attendance() {
         
 
       }
-
+      window.scrollTo(0,document.body.scrollHeight-100);
     const res = await fetch(api + '/recognize', { method: 'POST', body: FD })
       .then(res => res.json())
     console.log(res);
@@ -144,6 +149,8 @@ function Attendance() {
     var data = {
       stud_class: branch + '-' + section,
       subject: subject,
+      semester:semester,
+      department:branch,
       stud_data: fetched,
       token: localStorage.token
     }
@@ -163,6 +170,7 @@ function Attendance() {
       setbranch('')
       setsection('')
       setsubject('')
+      setsemester('')
       seterror({ message: 'Attendance Marked', is_have: true, type: 'success' })
     }
     else {
@@ -176,7 +184,7 @@ function Attendance() {
       <Grid item xs={12}>
         <Header />
       </Grid>
-      <Grid item container xs={12} >
+      <Grid item container xs={12} style={{paddingTop:'70px'}}>
         <AlertMessage error={error.is_have} type={error.type} seterror={seterror} message={error.message} />
         <Form
           departments={departments}
@@ -191,6 +199,9 @@ function Attendance() {
 
           subject={subject}
           setsubject={setsubject}
+
+          semester={semester}
+          setsemester={setsemester}
 
 
 

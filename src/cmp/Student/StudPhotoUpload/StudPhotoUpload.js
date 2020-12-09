@@ -100,7 +100,7 @@ function StudPhotoUpload() {
                  <Header />
                 
              </Grid>
-             <Grid item container  xs={12}>
+             <Grid item container  xs={12} style={{ paddingTop:'70px'}}>
                <Content images={images} loading={loading} fetched={fetched} imagestatus={imagestatus} isuploading={isuploading}/>
              </Grid>
              

@@ -5,7 +5,8 @@ import MenuIcon from '@material-ui/icons/Menu';
 import Drawer from './Drawer'
 import { useHistory } from 'react-router-dom';
 import { Avatar, Menu, MenuItem } from '@material-ui/core';
-import {get, Logout} from '../CommonCmp'
+import {get, Logout,toTitleCase} from '../CommonCmp'
+import { ExitToAppOutlined } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -18,13 +19,19 @@ const useStyles = makeStyles((theme) => ({
       flexGrow: 1,
     },
     menu:{
-      marginTop:35
+      marginTop:-10,
+      marginLeft:10
+    },
+    logoutalign:{
+      display:'flex',
+      alignItems:'center',
+      justifyContent:'center'
     }
   }));
 
 
 
-function Header() {
+function Header(props) {
   const [isopen, setisopen] = useState(false);
   const [anchorE1, setanchorE1] = useState(null);
   const [name, setname] = useState('')
@@ -41,8 +48,11 @@ function Header() {
        
       if(res)
       {
+        sessionStorage.name = res.name
          setname(res.name);
-         sessionStorage.name = res.name
+         
+         props.setname(res.name)
+         
          
       }
     }
@@ -62,21 +72,12 @@ function Header() {
   const handleMenu=(e)=>{
     setanchorE1(e.currentTarget)
   }
-  function toTitleCase(str)
-  {
-    if(str)
-    return str.replace(
-      /\w\S*/g,function(txt){return txt.charAt(0).toUpperCase()+txt.substr(1).toLowerCase();}
-    )
-    else
-    {return str}
-
-  }
+  
     
     
     return(
 <div className={classes.root}>
-      <AppBar position="static">
+      <AppBar position="fixed">
         <Toolbar>
           <IconButton edge="start" onClick={()=>setisopen(true)} className={classes.menuButton} color="inherit" aria-label="menu">
             <MenuIcon />
@@ -102,8 +103,8 @@ function Header() {
                 open={Boolean(anchorE1)}
                 onClose={handleClose}
               >
-                <MenuItem onClick={handleClose}>{toTitleCase(name) || toTitleCase(sessionStorage.name)}</MenuItem>
-                <MenuItem onClick={()=>Logout(history)}>Logout</MenuItem>
+                <MenuItem onClick={handleClose}><Avatar alt={name || sessionStorage.name} src={`data:image/png;base64,` + sessionStorage.avatar} />  &nbsp;{toTitleCase(name) || toTitleCase(sessionStorage.name)}</MenuItem>
+            <MenuItem className={classes.logoutalign} onClick={() => Logout(history)}><ExitToAppOutlined/>signout</MenuItem>
               </Menu>
         </Toolbar>
       </AppBar>

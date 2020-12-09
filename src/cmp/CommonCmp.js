@@ -81,8 +81,19 @@ async function get(url,data)
   
 }
 
+function toTitleCase(str)
+  {
+    if(str)
+    return str.replace(
+      /\w\S*/g,function(txt){return txt.charAt(0).toUpperCase()+txt.substr(1).toLowerCase();}
+    )
+    else
+    {return str}
+
+  }
+
 export default AlertMessage
 
   export {
-Loading,Logout,get
+Loading,Logout,get,toTitleCase
   }

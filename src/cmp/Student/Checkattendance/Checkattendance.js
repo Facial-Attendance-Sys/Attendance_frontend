@@ -13,7 +13,7 @@ function Checkattendance() {
                 <Header />
 
             </Grid>
-            <Grid item container xs={12}>
+            <Grid item container xs={12} style={{ paddingTop:'70px'}}>
                 <Body />
             </Grid>
         </Grid>
@@ -23,6 +23,8 @@ function Checkattendance() {
 function Body() {
     const [loading, setloading] = useState(true)
     const [res, setres] = useState([])
+    const [attendance,setattendance]=useState('')
+
     
     useEffect(() => {
         async function get_data()
@@ -34,6 +36,7 @@ function Body() {
           setloading(false);
           console.log(data);
           setres(data.stud_data)
+          setattendance(data.attendance)
          }
         
 
@@ -45,7 +48,7 @@ function Body() {
     
     if(loading) return <Loading/>
 
-    return <Stud_table fetched={res}/>
+    return <Stud_table fetched={res} attendance={attendance}/>
 
 
 }
@@ -76,18 +79,7 @@ const useStyles = makeStyles({
 function Stud_table(props)
 {  const classes=useStyles();
 
-   const getpercentage=()=>
-   {
-       var totallectures=0;
-      var  presentlectures=0;
-       props.fetched.map((data)=>{
-           totallectures+=data.total;
-           presentlectures+=data.present
-
-       })
-
-       return Math.round((presentlectures/totallectures)*10000,2)/100;
-   }
+   
     return (<>
     <TableContainer component={Paper}>
       <Table className={classes.table} aria-label="simple table">
@@ -116,7 +108,7 @@ function Stud_table(props)
 
            <TableRow key={'overall'} className={classes.tfooter} >
               <TableCell component="th" scope="row" align="center" colSpan={4} className={classes.tfooter}>
-                Total : {getpercentage()}%
+                Total : {props.attendance}%
               </TableCell>
               
 

@@ -23,18 +23,26 @@ function Drawer(props) {
             onClose={()=>props.setisopen(false)}
             onOpen={()=>props.setisopen(true)}
           >
-            <Items/>
+            <Items close={props}/>
           </SwipeableDrawer>
         </div>
     )
 }
 
 
-function Items()
+
+function Items(props)
 {   
     const history=useHistory()
     const classes= useStyles()
-    
+    const iconcolor='primary'
+
+    const goto=(link)=>{
+      history.push(link);
+      props.close.setisopen(false)
+      
+      } 
+
     return (
     <div
       className={classes.list}
@@ -43,23 +51,23 @@ function Items()
       >
      <List>
          <ListItem button key={1} >
-         <ListItemIcon> <HomeOutlined/> </ListItemIcon>
+         <ListItemIcon> <HomeOutlined color={iconcolor}/> </ListItemIcon>
           
-         <ListItemText primary={'Dashboard'} onClick={()=>history.push('/student')}/>
+         <ListItemText primary={'Dashboard'} onClick={()=>goto('/student')}/>
          </ListItem>
 
          <ListItem button key={2} >
-         <ListItemIcon> <AddOutlined/> </ListItemIcon> 
-         <ListItemText primary={'Upload Photo'} onClick={()=>history.push('/student/upload')}/>
+         <ListItemIcon> <AddOutlined color={iconcolor}/> </ListItemIcon> 
+         <ListItemText primary={'Upload Photo'} onClick={()=>goto('/student/upload')}/>
          </ListItem>
          
          <ListItem button key={3} >
-         <ListItemIcon><CheckBoxOutlined/> </ListItemIcon> 
-         <ListItemText primary={'Check Attendance'} onClick={()=>history.push('/student/attendance')}/>
+         <ListItemIcon><CheckBoxOutlined color={iconcolor}/> </ListItemIcon> 
+         <ListItemText primary={'Check Attendance'} onClick={()=>goto('/student/attendance')}/>
          </ListItem>
 
          <ListItem button key={4} >
-         <ListItemIcon><ExitToAppOutlined/>  </ListItemIcon> 
+         <ListItemIcon><ExitToAppOutlined color={iconcolor}/>  </ListItemIcon> 
          <ListItemText primary={'Logout'} onClick={()=>Logout(history)}/>
          </ListItem>
          

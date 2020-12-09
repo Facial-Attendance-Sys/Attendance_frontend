@@ -66,7 +66,7 @@ function Body(props) {
   const on_submit = (data) => {
 
     //  alert(JSON.stringify(data, null, 2));
-    fetch(api + '/user/login', { method: 'POST', headers: { 'Content-type': 'application/json' }, body: JSON.stringify(data) })
+      fetch(api + '/user/login', { method: 'POST', headers: { 'Content-type': 'application/json' }, body: JSON.stringify(data) })
       .then(res => res.json())
       .then((data) => on_data(data))
       .catch(err => (formik.setSubmitting(false) || seterror({ message: 'Server Error', is_have: true, type: 'error' })))
@@ -106,6 +106,7 @@ function Body(props) {
     formik.handleBlur(e)
 
   }
+  
   const formik = useFormik({
     initialValues: {
       uid: '',

@@ -10,6 +10,7 @@ import AlertMessage from '../CommonCmp';
 import api from '../API_URL'
 
 const Departments = [{ 'value': 'Computer Science', 'svalue': 'CSE' }]
+const semesters=['1','2','3','4','5','6','7','8'];
 const sections = ['A', 'B', 'C', 'D']
 export default function SignUp() {
 
@@ -64,7 +65,8 @@ export default function SignUp() {
       Name: '',
       section: '',
       role: 'student',
-      email: ''
+      email: '',
+      semester:''
     },
     validationSchema: SignUpSchema,
     onSubmit: on_submit
@@ -180,6 +182,29 @@ export default function SignUp() {
               </MenuItem>
             ))}
           </TextField>
+
+          <TextField
+            id="semester"
+            select
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            label="Semester"
+            name="semester"
+            value={formik.values.semester}
+            onChange={on_value_change}
+            onBlur={on_blur}
+            error={formik.touched.semester && Boolean(formik.errors.semester)}
+            helperText={formik.touched.semester && formik.errors.semester}
+          >
+            {semesters.map((option) => (
+              <MenuItem key={option} value={option}>
+                {option}
+              </MenuItem>
+            ))}
+          </TextField>
+          
           <TextField
             id="section"
             select

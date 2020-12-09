@@ -26,6 +26,10 @@ const SignUpSchema = yup.object({
     .string('Select department')
     .required('Department is Required')
     ,
+    semester: yup
+    .string('Select Semester')
+    .required('Semester is Required')
+    ,
     Name: yup
     .string('Enter Name')
     .required('Name is Required')

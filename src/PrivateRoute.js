@@ -10,7 +10,7 @@ function PrivateRoute(props) {
     useEffect(() => {
         async function fetchData() {
           const d=await check_session(localStorage.token,props.role) 
-         //console.log(d);
+          //console.log(d);
           setis_logged_in(d.is_session_valid)
           setloading(false)
           
@@ -28,7 +28,7 @@ function PrivateRoute(props) {
         return () => {
           fetchData()
           setis_logged_in(true)
-            setloading(true)
+          setloading(true)
           
         }
         

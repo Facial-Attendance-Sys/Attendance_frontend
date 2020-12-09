@@ -18,7 +18,7 @@ function StudImageCard(props) {
         <CardMedia
           className={classes.media}
           image={props.url}
-          title="Contemplative Reptile"
+          title={sessionStorage.name}
         />
         <CardContent>
           <Typography variant="h6" color='secondary' className={classes.title}>

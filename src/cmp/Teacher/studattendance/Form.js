@@ -1,6 +1,7 @@
-import { Grid, MenuItem, TextField } from '@material-ui/core'
+import { Button, CircularProgress, Grid, MenuItem, TextField } from '@material-ui/core'
 import React from 'react'
-import useStyles from './Styles'
+import useStyles from '../TakeAttendance/Styles'
+
 const semesters=['1','2','3','4','5','6','7','8'];
 function Form(props) {
     const classes=useStyles()
@@ -29,10 +30,10 @@ function Form(props) {
         </TextField>
         </Grid>
         <Grid className={classes.field} item xs={12} lg={3}>
-          { props.branch &&  <TextField
+           { props.branch && <TextField
                 id="semester"
                 select
-            
+                
                 variant="outlined"
                     margin="normal"
                     required
@@ -43,13 +44,13 @@ function Form(props) {
                 onChange={(e)=>props.setsemester(e.target.value)}
                 
                 >
-                {semesters.map((option,index) => (
+                {semesters.map((option) => (
                     <MenuItem key={option} value={option}>
                     {option}
                     </MenuItem>
                 ))}
         </TextField>
-          } 
+           }
         </Grid>
         <Grid className={classes.field} item xs={12} lg={3}>
            { props.semester && <TextField
@@ -74,30 +75,23 @@ function Form(props) {
         </TextField>
            }
         </Grid>
-
-        <Grid className={classes.field} item xs={12} lg={3}>
-           { props.section && <TextField
-                id="subject"
-                select
-                
-                variant="outlined"
-                    margin="normal"
-                    required
+        <Grid item xs={11} sm={3} >
+          {   props.branch && props.section &&   <Button
+                    
                     fullWidth
-                label="subject"
-                name="subject"
-                value={props.subject}
-                onChange={(e)=>props.setsubject(e.target.value)}
-                
+                    variant="contained"
+                    color="primary"
+                    className={classes.submit}
+                    onClick={props.on_submit}
+                    disabled={props.loading}
                 >
-                {props.subjects.map((option) => (
-                    <MenuItem key={option.code} value={option.code+' '+option.name}>
-                    {option.code+' '+option.name}
-                    </MenuItem>
-                ))}
-        </TextField>
-            }
+                    {props.loading?<CircularProgress color='secondary' size={30} />:'Search'}
+                </Button>
+          }
         </Grid>
+
+        
+       
         </>
     )
 }
