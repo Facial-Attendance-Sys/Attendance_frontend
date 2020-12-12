@@ -11,10 +11,14 @@ import AlertMessage, { get } from '../../CommonCmp'
 
 import Compress from 'compress.js';
 
+const subjectdata={
+'5':[{ 'name': 'Compiler Design', 'code': 'KCS-502' }, { 'name': 'DBMS', 'code': 'KCS-501' }, { 'name': 'Web Designing', 'code': 'KCS-052' }, { 'name': 'DAA', 'code': 'KCS-503' }, { 'name': 'Mini Project', 'code': 'KCS-554' }]
+}
+
 function Attendance() {
   const [departments, setdepartments] = useState({ 'values': ['Computer Science'], 'short': ['CSE'] })
   const [sections, setsections] = useState(['A', 'B', 'C', 'D'])
-  const [subjects, setsubjects] = useState([{ 'name': 'Compiler Design', 'code': 'kcs-501' }, { 'name': 'DBMS', 'code': 'Kcs-502' }, { 'name': 'web Designing', 'code': 'Kcs-052' }, { 'name': 'DAA', 'code': 'Kcs-503' }])
+  const [subjects, setsubjects] = useState([])
   const [error, seterror] = useState({ is_have: false, message: 'this is an error', type: 'error' })
   const [branch, setbranch] = useState('')
   const [section, setsection] = useState('')
@@ -34,6 +38,13 @@ function Attendance() {
 
     }
   }, [branch, section])
+
+  useEffect(() => {
+    setsubjects(subjectdata[semester])
+    return () => {
+
+    }
+  }, [semester])
 
 
 
@@ -80,6 +91,7 @@ function Attendance() {
 
       }
       window.scrollTo(0,document.body.scrollHeight-100);
+
     const res = await fetch(api + '/recognize', { method: 'POST', body: FD })
       .then(res => res.json())
     console.log(res);

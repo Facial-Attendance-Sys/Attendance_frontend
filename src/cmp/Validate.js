@@ -10,10 +10,19 @@ const SignInSchema = yup.object({
       ,
   });
 
+const passwordschema=yup.object({
+  password: yup
+  .string('Enter your password')
+  .required('Password is required')
+  .matches(
+    /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
+    "Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and one special case Character"
+  ),
+})
 const SignUpSchema = yup.object({
     uid: yup
       .string('Enter your ERP ID')
-      
+      .trim()
       .required('ERP ID is required'),
     password: yup
       .string('Enter your password')
@@ -47,6 +56,6 @@ const SignUpSchema = yup.object({
 
 
 
-export {SignUpSchema}
+export {SignUpSchema,passwordschema}
 export default SignInSchema
 

@@ -11,6 +11,7 @@ import AlertMessage from '../CommonCmp'
 import check_session from '../Session'
 import api from '../API_URL'
 import { Loading } from '../CommonCmp'
+import Forgetpassword from '../Forgetpassword'
 
 export default function SignIn() {
 
@@ -19,7 +20,7 @@ export default function SignIn() {
   const [loading, setloading] = useState(true)
   const [usertype, setusertype] = useState(null)
   const [refresh, setrefresh] = useState(null)
-
+ 
   useEffect(() => {
     async function fetchData() {
       console.log('sessionchecking');
@@ -58,7 +59,15 @@ export default function SignIn() {
 
 
 function Body(props) {
+  const [open,setopen] =useState(false)
   const classes = SignInStyles();
+  const handleClose=()=>{
+    setopen(false)
+  }
+
+  const handleOpen=()=>{
+    setopen(true)
+  }
 
   const [error, seterror] = useState({ is_have: false, message: 'this is an error', type: 'error' })
   const [isvisible, setisvisible] = useState(false)
@@ -183,11 +192,11 @@ function Body(props) {
           >
             {formik.isSubmitting ? <CircularProgress color='secondary' size={30} /> : 'Login'}
           </Button>
-
+          <Forgetpassword open={open} handleClose={handleClose}/>
 
           <Grid container>
             <Grid item xs>
-              <Link href="#" variant="body2">
+              <Link href="#" variant="body2" onClick={handleOpen}>
                 Forgot password?
               </Link>
             </Grid>

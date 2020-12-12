@@ -8,15 +8,19 @@ import SignUpStyles from './SignUpStyles'
 import { SignUpSchema } from '../Validate';
 import AlertMessage from '../CommonCmp';
 import api from '../API_URL'
+import Forgetpassword from '../Forgetpassword'
+
 
 const Departments = [{ 'value': 'Computer Science', 'svalue': 'CSE' }]
 const semesters=['1','2','3','4','5','6','7','8'];
 const sections = ['A', 'B', 'C', 'D']
-export default function SignUp() {
+
+export default function SignUp(){
 
   const classes = SignUpStyles();
   const [error, seterror] = useState({ is_have: false, message: 'this is an error', type: 'error' })
   const [isvisible, setisvisible] = useState(false)
+  const [open,setopen] =useState(false)
 
   const on_submit = (data) => {
 
@@ -55,6 +59,14 @@ export default function SignUp() {
   const on_blur = (e) => {
     formik.handleBlur(e)
 
+  }
+
+  const handleClose=()=>{
+    setopen(false)
+  }
+
+  const handleOpen=()=>{
+    setopen(true)
   }
 
   const formik = useFormik({
@@ -237,11 +249,11 @@ export default function SignUp() {
           >
             {formik.isSubmitting ? <CircularProgress color='secondary' size={30} /> : 'Register'}
           </Button>
-
+          <Forgetpassword open={open} handleClose={handleClose}/>
 
           <Grid container>
             <Grid item xs>
-              <Link href="#" variant="body2">
+            <Link href="#" variant="body2" onClick={handleOpen}>
                 Forgot password?
               </Link>
             </Grid>

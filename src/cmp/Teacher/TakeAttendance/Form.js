@@ -90,7 +90,7 @@ function Form(props) {
                 onChange={(e)=>props.setsubject(e.target.value)}
                 
                 >
-                {props.subjects.map((option) => (
+                {props.subjects && props.subjects.map((option) => (
                     <MenuItem key={option.code} value={option.code+' '+option.name}>
                     {option.code+' '+option.name}
                     </MenuItem>

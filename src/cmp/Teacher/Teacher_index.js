@@ -112,7 +112,7 @@ function CardSection()
             <SimpleCard text="Check Attendance" src="https://cdn2.iconfinder.com/data/icons/education-59/128/check_up-512.png" goto="/teacher/checkattendance"/>
             </Grid>
             <Grid item xs={12} lg={4}>
-            <SimpleCard text="Update Attendance" src="https://icons.iconarchive.com/icons/custom-icon-design/flatastic-4/512/Male-user-edit-icon.png" goto="/teacher"/>
+            <SimpleCard text="Update Attendance" src="https://icons.iconarchive.com/icons/custom-icon-design/flatastic-4/512/Male-user-edit-icon.png" goto="/teacher/updateattendance"/>
             </Grid>
             
             <Grid item xs={12} lg={4}>
