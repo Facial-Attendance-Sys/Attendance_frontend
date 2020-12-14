@@ -11,14 +11,15 @@ import { useHistory } from 'react-router-dom'
 import Quote from './Quote'
 
 function Student_index(){
+   const [name,setname]=useState('');
     
     return (
         <Grid container >
              <Grid item xs={12}>
-                 <Header />
+                 <Header setname={setname}/>
              </Grid>
              
-              <Body/>
+              <Body name={name}/>
              
              
         </Grid>
@@ -101,7 +102,7 @@ function Body(props)
             </StyledBadge>
             </Grid>
             <Grid item xs={12} lg={4} className={classes.center}>
-              <Typography variant="h5">Welcome,<b>{toTitleCase(sessionStorage.name).split(' ')[0]}</b></Typography>
+              <Typography variant="h5">Welcome,<b>{sessionStorage.name && toTitleCase(sessionStorage.name).split(' ')[0]}</b></Typography>
             </Grid>
 
             <Grid item xs={12} lg={4} className={classes.center} style={{flexDirection:'column'}}>

@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 
-function Header() {
+function Header(props) {
   const [isopen, setisopen] = useState(false);
   const [anchorE1, setanchorE1] = useState(null);
   const [name, setname] = useState('');
@@ -50,6 +50,7 @@ function Header() {
        if(res)
        {
           setname(res.name);
+          props.setname(res.name)
           sessionStorage.name = res.name
           if (res.avatar) {
             sessionStorage.avatar = res.avatar
