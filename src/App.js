@@ -19,7 +19,7 @@ function App(){
       <Switch>
         <Route exact path='/' component={SignIn} />
         <Route  exact path='/signup' component={SignUp}/>
-       
+        
         <PrivateRoute  exact path='/teacher' component={Teacher_index} role='teacher'/>
         <PrivateRoute  exact path='/teacher/attendance' component={Attendance} role='teacher'/>
         <PrivateRoute  exact path='/teacher/checkattendance' component={studattendance} role='teacher' />

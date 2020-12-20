@@ -24,6 +24,7 @@ function Attendance() {
   const [section, setsection] = useState('')
   const [subject, setsubject] = useState('')
   const [semester, setsemester] = useState('')
+  const [date,setdate]=useState(new Date());
 
   const [images, setimages] = useState([])
   const [isuploading, setisuploading] = useState(false)
@@ -164,7 +165,8 @@ function Attendance() {
       semester:semester,
       department:branch,
       stud_data: fetched,
-      token: localStorage.token
+      token: localStorage.token,
+      date:date
     }
 
     setloading(true)
@@ -183,6 +185,7 @@ function Attendance() {
       setsection('')
       setsubject('')
       setsemester('')
+    
       seterror({ message: 'Attendance Marked', is_have: true, type: 'success' })
     }
     else {
@@ -202,7 +205,10 @@ function Attendance() {
           departments={departments}
           sections={sections}
           subjects={subjects}
-
+           
+          date={date}
+          setdate={setdate}
+          
           branch={branch}
           setbranch={setbranch}
 

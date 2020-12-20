@@ -1,20 +1,49 @@
 import { Grid, MenuItem, TextField } from '@material-ui/core'
 import React from 'react'
 import useStyles from './Styles'
+import moment from 'moment';
+
+function formatDate(date)
+{
+    var d=new Date(date);
+    
+  return moment(d).format('YYYY-MM-DD');
+
+}
+
 const semesters=['1','2','3','4','5','6','7','8'];
 function Form(props) {
     const classes=useStyles()
     return (
-        <>
+        <>  <Grid className={classes.datefield} item xs={12} lg={3}>
+                        <TextField
+                        className={classes.font}
+                        variant="outlined"
+                    id="date"
+                    label="Date"
+                    type="date"
+                    fullWidth
+                    value={formatDate(props.date)}
+                    onChange={(e)=>props.setdate(e.target.value)}
+                    inputProps={{
+                        max:formatDate(new Date()),
+                        min:moment(new Date).subtract(3,'Days').format('YYYY-MM-DD')
+                    }}
+                    className={classes.textField}
+                    InputLabelProps={{
+                    shrink: true,
+                    }}
+                />
+            </Grid>
             <Grid className={classes.field} item xs={12} lg={3}>
             <TextField
                 id="Department"
                 select
             
                 variant="outlined"
-                    margin="normal"
-                    required
-                    fullWidth
+                margin="normal"
+                required
+                fullWidth
                 label="Department"
                 name="department"
                 value={props.branch}
@@ -26,7 +55,7 @@ function Form(props) {
                     {option}
                     </MenuItem>
                 ))}
-        </TextField>
+            </TextField>
         </Grid>
         <Grid className={classes.field} item xs={12} lg={3}>
           { props.branch &&  <TextField
